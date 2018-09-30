@@ -1,0 +1,11 @@
+entity Customer {
+    name String required
+}
+
+entity Task {
+    name String required
+}
+
+relationship OneToMany {
+    Customer{tasks} to Task{customer(name)}
+}
