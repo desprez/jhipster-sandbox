@@ -16,9 +16,6 @@ const ENTITY_STATES = [...customerRoute, ...customerPopupRoute];
 
 @NgModule({
     imports: [JhipsterSandBoxSharedModule, RouterModule.forChild(ENTITY_STATES)],
-    exports: [
-        CustomerComponent
-    ],
     declarations: [
         CustomerComponent,
         CustomerDetailComponent,
