@@ -1,22 +1,31 @@
 package io.github.jhipster.application.web.rest;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.codahale.metrics.annotation.Timed;
+
 import io.github.jhipster.application.domain.Pet;
 import io.github.jhipster.application.repository.PetRepository;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.application.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * REST controller for managing Pet.
@@ -31,7 +40,7 @@ public class PetResource {
 
     private final PetRepository petRepository;
 
-    public PetResource(PetRepository petRepository) {
+    public PetResource(final PetRepository petRepository) {
         this.petRepository = petRepository;
     }
 
@@ -44,12 +53,12 @@ public class PetResource {
      */
     @PostMapping("/pets")
     @Timed
-    public ResponseEntity<Pet> createPet(@Valid @RequestBody Pet pet) throws URISyntaxException {
+    public ResponseEntity<Pet> createPet(@Valid @RequestBody final Pet pet) throws URISyntaxException {
         log.debug("REST request to save Pet : {}", pet);
         if (pet.getId() != null) {
             throw new BadRequestAlertException("A new pet cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Pet result = petRepository.save(pet);
+        final Pet result = petRepository.save(pet);
         return ResponseEntity.created(new URI("/api/pets/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -66,12 +75,12 @@ public class PetResource {
      */
     @PutMapping("/pets")
     @Timed
-    public ResponseEntity<Pet> updatePet(@Valid @RequestBody Pet pet) throws URISyntaxException {
+    public ResponseEntity<Pet> updatePet(@Valid @RequestBody final Pet pet) throws URISyntaxException {
         log.debug("REST request to update Pet : {}", pet);
         if (pet.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Pet result = petRepository.save(pet);
+        final Pet result = petRepository.save(pet);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, pet.getId().toString()))
             .body(result);
@@ -97,9 +106,9 @@ public class PetResource {
      */
     @GetMapping("/pets/{id}")
     @Timed
-    public ResponseEntity<Pet> getPet(@PathVariable Long id) {
+    public ResponseEntity<Pet> getPet(@PathVariable final Long id) {
         log.debug("REST request to get Pet : {}", id);
-        Optional<Pet> pet = petRepository.findById(id);
+        final Optional<Pet> pet = petRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(pet);
     }
 
@@ -111,10 +120,26 @@ public class PetResource {
      */
     @DeleteMapping("/pets/{id}")
     @Timed
-    public ResponseEntity<Void> deletePet(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePet(@PathVariable final Long id) {
         log.debug("REST request to delete Pet : {}", id);
 
         petRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * GET /pets/owners/{ownerId} : get all the pets by owner id.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of actions in
+     *         body
+     */
+    @GetMapping("/pets/owners/{ownerId}")
+    @Timed
+    public List<Pet> getAllPetsForOwner(@PathVariable final Long ownerId) {
+        log.debug("REST request to get all pets for owner : {}", ownerId);
+
+        final List<Pet> actions = petRepository.findByOwnerId(ownerId);
+
+        return actions;
     }
 }

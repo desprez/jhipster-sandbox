@@ -1,9 +1,11 @@
 package io.github.jhipster.application.repository;
 
-import io.github.jhipster.application.domain.Pet;
-import org.springframework.data.jpa.repository.*;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import io.github.jhipster.application.domain.Pet;
 
 /**
  * Spring Data  repository for the Pet entity.
@@ -12,4 +14,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PetRepository extends JpaRepository<Pet, Long> {
 
+    List<Pet> findByOwnerId(Long id);
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
@@ -14,16 +15,29 @@ import { PetService } from './pet.service';
 export class PetComponent implements OnInit, OnDestroy {
     pets: IPet[];
     currentAccount: any;
+    ownerId: any;
     eventSubscriber: Subscription;
 
     constructor(
         private petService: PetService,
         private jhiAlertService: JhiAlertService,
         private eventManager: JhiEventManager,
+        private activatedRoute: ActivatedRoute,
         private principal: Principal
-    ) {}
+    ) {
+        this.ownerId = activatedRoute.snapshot.params['id'] ? activatedRoute.snapshot.params['id'] : null;
+    }
 
     loadAll() {
+        if (this.ownerId) {
+            this.petService.queryByOwner(this.ownerId).subscribe(
+                (res: HttpResponse<IPet[]>) => {
+                    this.pets = res.body;
+                },
+                (res: HttpErrorResponse) => this.onError(res.message)
+            );
+            return;
+        }
         this.petService.query().subscribe(
             (res: HttpResponse<IPet[]>) => {
                 this.pets = res.body;

@@ -35,4 +35,8 @@ export class PetService {
     delete(id: number): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
+
+    queryByOwner(id: number): Observable<EntityArrayResponseType> {
+        return this.http.get<IPet[]>(`${this.resourceUrl}/owners/${id}`, { observe: 'response' });
+    }
 }

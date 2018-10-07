@@ -16,6 +16,7 @@ const ENTITY_STATES = [...petRoute, ...petPopupRoute];
 
 @NgModule({
     imports: [JhipsterSandBoxSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    exports: [PetComponent],
     declarations: [PetComponent, PetDetailComponent, PetUpdateComponent, PetDeleteDialogComponent, PetDeletePopupComponent],
     entryComponents: [PetComponent, PetUpdateComponent, PetDeleteDialogComponent, PetDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
