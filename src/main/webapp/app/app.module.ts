@@ -18,6 +18,7 @@ import { JhipsterSandBoxHomeModule } from './home/home.module';
 import { JhipsterSandBoxAccountModule } from './account/account.module';
 import { JhipsterSandBoxEntityModule } from './entities/entity.module';
 import * as moment from 'moment';
+import { JhipsterSandBoxAppNestedModule } from './nested/nested.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
 
@@ -30,7 +31,8 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
         JhipsterSandBoxCoreModule,
         JhipsterSandBoxHomeModule,
         JhipsterSandBoxAccountModule,
-        JhipsterSandBoxEntityModule
+        JhipsterSandBoxEntityModule,
+        JhipsterSandBoxAppNestedModule
         // jhipster-needle-angular-add-module JHipster will add new module here
     ],
     declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
